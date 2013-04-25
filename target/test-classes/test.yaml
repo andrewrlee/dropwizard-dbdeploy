@@ -1,0 +1,13 @@
+database:  
+    
+    driverClass: com.mysql.jdbc.Driver
+    user       : root
+    password   : 
+    url        : jdbc:mysql://localhost:3306/demando
+    
+    scripts: 
+       drop    : scripts/other/drop.sql
+       create  : scripts/changelog/createSchemaVersionTable.mysql.sql
+    
+    dbdeploy:
+       scriptLocation : scripts/set0/

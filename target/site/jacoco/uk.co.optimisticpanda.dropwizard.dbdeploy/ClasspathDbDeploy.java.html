@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ClasspathDbDeploy.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Dropwizard Dbdeploy</a> &gt; <a href="index.html" class="el_package">uk.co.optimisticpanda.dropwizard.dbdeploy</a> &gt; <span class="el_source">ClasspathDbDeploy.java</span></div><h1>ClasspathDbDeploy.java</h1><pre class="source lang-java linenums">package uk.co.optimisticpanda.dropwizard.dbdeploy;
+
+import java.io.File;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import uk.co.optimisticpanda.dropwizard.ScriptApplier;
+
+import com.dbdeploy.ChangeScriptApplier;
+import com.dbdeploy.Controller;
+import com.dbdeploy.appliers.DirectToDbApplier;
+import com.dbdeploy.database.DelimiterType;
+import com.dbdeploy.database.LineEnding;
+import com.dbdeploy.database.QueryStatementSplitter;
+import com.dbdeploy.database.changelog.DatabaseSchemaVersionManager;
+import com.dbdeploy.database.changelog.QueryExecuter;
+import com.dbdeploy.exceptions.UsageException;
+import com.dbdeploy.scripts.ChangeScript;
+import com.dbdeploy.scripts.ChangeScriptRepository;
+import com.google.common.base.Charsets;
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
+
+<span class="fc" id="L29">public class ClasspathDbDeploy {</span>
+<span class="fc" id="L30">    private static Logger log = LoggerFactory.getLogger(ClasspathDbDeploy.class);</span>
+
+    private String url;
+    private String userid;
+    private String password;
+<span class="fc" id="L35">    private Charset encoding = Charsets.UTF_8;</span>
+    private String scriptlocation;
+    private File outputfile;
+    private File undoOutputfile;
+<span class="fc" id="L39">    private LineEnding lineEnding = LineEnding.platform;</span>
+    private String dbms;
+<span class="fc" id="L41">    private Long lastChangeToApply = Long.MAX_VALUE;</span>
+    private String driver;
+<span class="fc" id="L43">    private String changeLogTableName = &quot;changelog&quot;;</span>
+<span class="fc" id="L44">    private String delimiter = &quot;;&quot;;</span>
+<span class="fc" id="L45">    private DelimiterType delimiterType = DelimiterType.normal;</span>
+    private String templatesLocation;
+    private Map&lt;String, String&gt; scripts;
+
+    public void go() throws Exception {
+<span class="nc" id="L50">        log.info(getWelcomeString());</span>
+
+<span class="nc" id="L52">        validate();</span>
+<span class="nc" id="L53">        checkForRequiredParameter(scriptlocation, &quot;scriptlocation&quot;);</span>
+
+<span class="nc" id="L55">        Class.forName(driver);</span>
+
+<span class="nc" id="L57">        QueryExecuter queryExecuter = new QueryExecuter(url, userid, password);</span>
+
+<span class="nc" id="L59">        DatabaseSchemaVersionManager databaseSchemaVersionManager = new DatabaseSchemaVersionManager(queryExecuter, changeLogTableName);</span>
+
+<span class="nc" id="L61">        List&lt;ChangeScript&gt; changeScripts = new ClasspathResourceScanner(encoding).getChangeScriptsForLocation(scriptlocation);</span>
+<span class="nc" id="L62">        ChangeScriptRepository changeScriptRepository = new ChangeScriptRepository(changeScripts);</span>
+
+<span class="nc" id="L64">        ChangeScriptApplier doScriptApplier = getChangeScriptApplier(Optional.of(databaseSchemaVersionManager));</span>
+
+<span class="nc" id="L66">        ChangeScriptApplier undoScriptApplier = null;</span>
+
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (undoOutputfile != null) {</span>
+<span class="nc" id="L69">            undoScriptApplier = new ClasspathUndoTemplateBasedApplier(new PrintWriter(undoOutputfile), dbms, changeLogTableName, templatesLocation);</span>
+        }
+
+<span class="nc" id="L72">        Controller controller = new Controller(changeScriptRepository, databaseSchemaVersionManager, doScriptApplier, undoScriptApplier);</span>
+
+<span class="nc" id="L74">        controller.processChangeScripts(lastChangeToApply);</span>
+
+<span class="nc" id="L76">        queryExecuter.close();</span>
+<span class="nc" id="L77">    }</span>
+
+    public void executeScript(String resourceLocation) throws Exception {
+<span class="nc" id="L80">        log.info(getWelcomeString());</span>
+<span class="nc" id="L81">        validate();</span>
+
+<span class="nc" id="L83">        Class.forName(driver);</span>
+
+<span class="nc" id="L85">        ChangeScriptApplier scriptApplier = getChangeScriptApplier(Optional.&lt;DatabaseSchemaVersionManager&gt;absent());</span>
+
+<span class="nc" id="L87">        ChangeScript script = new ClasspathChangeScript(1L, resourceLocation, encoding);</span>
+<span class="nc" id="L88">        scriptApplier.apply(Lists.newArrayList(script));</span>
+<span class="nc" id="L89">        log.info(&quot;Completed execution of script: {}&quot;, resourceLocation);</span>
+<span class="nc" id="L90">    }</span>
+
+    private void validate() throws UsageException {
+<span class="nc" id="L93">        checkForRequiredParameter(userid, &quot;userid&quot;);</span>
+<span class="nc" id="L94">        checkForRequiredParameter(driver, &quot;driver&quot;);</span>
+<span class="nc" id="L95">        checkForRequiredParameter(url, &quot;url&quot;);</span>
+<span class="nc" id="L96">    }</span>
+
+    private void checkForRequiredParameter(String parameterValue, String parameterName) throws UsageException {
+<span class="nc bnc" id="L99" title="All 4 branches missed.">        if (parameterValue == null || parameterValue.length() == 0) {</span>
+<span class="nc" id="L100">            UsageException.throwForMissingRequiredValue(parameterName);</span>
+        }
+<span class="nc" id="L102">    }</span>
+
+    protected ChangeScriptApplier getChangeScriptApplier(Optional&lt;DatabaseSchemaVersionManager&gt; databaseSchemaVersionManager) throws Exception {
+<span class="nc" id="L105">        QueryExecuter queryExecuter = new QueryExecuter(url, userid, password);</span>
+<span class="nc" id="L106">        QueryStatementSplitter splitter = new QueryStatementSplitter();</span>
+<span class="nc" id="L107">        splitter.setDelimiter(delimiter);</span>
+<span class="nc" id="L108">        splitter.setDelimiterType(delimiterType);</span>
+<span class="nc" id="L109">        splitter.setOutputLineEnding(lineEnding);</span>
+
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        if (databaseSchemaVersionManager.isPresent()) {</span>
+<span class="nc" id="L112">            return new DirectToDbApplier(queryExecuter, databaseSchemaVersionManager.get(), splitter);</span>
+        }
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if (outputfile != null) {</span>
+<span class="nc" id="L115">            return new ClasspathTemplateBasedApplier(new PrintWriter(outputfile, encoding.toString()), dbms, changeLogTableName, templatesLocation);</span>
+        }
+<span class="nc" id="L117">        return new ScriptApplier(queryExecuter, splitter);</span>
+    }
+
+    public void setTemplateLocation(String templateLocation) {
+<span class="fc" id="L121">        this.templatesLocation = templateLocation;</span>
+<span class="fc" id="L122">    }</span>
+
+    public void setDelimiter(String delimiter) {
+<span class="fc" id="L125">        this.delimiter = delimiter;</span>
+<span class="fc" id="L126">    }</span>
+
+    public void setDelimiterType(DelimiterType delimiterType) {
+<span class="fc" id="L129">        this.delimiterType = delimiterType;</span>
+<span class="fc" id="L130">    }</span>
+
+    public String getWelcomeString() {
+<span class="nc" id="L133">        String version = getClass().getPackage().getImplementationVersion();</span>
+<span class="nc" id="L134">        return &quot;dbdeploy &quot; + version;</span>
+    }
+
+    public void setDriver(String driver) {
+<span class="fc" id="L138">        this.driver = driver;</span>
+<span class="fc" id="L139">    }</span>
+
+    public void setUrl(String url) {
+<span class="fc" id="L142">        this.url = url;</span>
+<span class="fc" id="L143">    }</span>
+
+    public void setUserid(String userid) {
+<span class="fc" id="L146">        this.userid = userid;</span>
+<span class="fc" id="L147">    }</span>
+
+    public void setPassword(String password) {
+<span class="fc" id="L150">        this.password = password;</span>
+<span class="fc" id="L151">    }</span>
+
+    public void setScriptLocation(String scriptLocation) {
+<span class="fc" id="L154">        this.scriptlocation = scriptLocation;</span>
+<span class="fc" id="L155">    }</span>
+
+    public void setOutputfile(File outputfile) {
+<span class="fc" id="L158">        this.outputfile = outputfile;</span>
+<span class="fc" id="L159">    }</span>
+
+    public void setDbms(String dbms) {
+<span class="fc" id="L162">        this.dbms = dbms;</span>
+<span class="fc" id="L163">    }</span>
+
+    public void setLastChangeToApply(Long lastChangeToApply) {
+<span class="fc" id="L166">        this.lastChangeToApply = lastChangeToApply;</span>
+<span class="fc" id="L167">    }</span>
+
+    public void setUndoOutputfile(File undoOutputfile) {
+<span class="fc" id="L170">        this.undoOutputfile = undoOutputfile;</span>
+<span class="fc" id="L171">    }</span>
+
+    public void setChangeLogTableName(String changeLogTableName) {
+<span class="fc" id="L174">        this.changeLogTableName = changeLogTableName;</span>
+<span class="fc" id="L175">    }</span>
+
+    public void setEncoding(Charset encoding) {
+<span class="fc" id="L178">        this.encoding = encoding;</span>
+<span class="fc" id="L179">    }</span>
+
+    public void setLineEnding(LineEnding lineEnding) {
+<span class="fc" id="L182">        this.lineEnding = lineEnding;</span>
+<span class="fc" id="L183">    }</span>
+
+    public void setScripts(Map&lt;String, String&gt; scripts) {
+<span class="fc" id="L186">        this.scripts = scripts;</span>
+<span class="fc" id="L187">    }</span>
+
+    public String getUrl() {
+<span class="fc" id="L190">        return url;</span>
+    }
+
+    public String getUserid() {
+<span class="fc" id="L194">        return userid;</span>
+    }
+
+    public String getPassword() {
+<span class="fc" id="L198">        return password;</span>
+    }
+
+    public Charset getEncoding() {
+<span class="fc" id="L202">        return encoding;</span>
+    }
+
+    public String getScriptlocation() {
+<span class="nc" id="L206">        return scriptlocation;</span>
+    }
+
+    public File getOutputfile() {
+<span class="nc" id="L210">        return outputfile;</span>
+    }
+
+    public File getUndoOutputfile() {
+<span class="nc" id="L214">        return undoOutputfile;</span>
+    }
+
+    public LineEnding getLineEnding() {
+<span class="fc" id="L218">        return lineEnding;</span>
+    }
+
+    public String getDbms() {
+<span class="fc" id="L222">        return dbms;</span>
+    }
+
+    public Long getLastChangeToApply() {
+<span class="fc" id="L226">        return lastChangeToApply;</span>
+    }
+
+    public String getDriver() {
+<span class="fc" id="L230">        return driver;</span>
+    }
+
+    public String getChangeLogTableName() {
+<span class="fc" id="L234">        return changeLogTableName;</span>
+    }
+
+    public String getDelimiter() {
+<span class="fc" id="L238">        return delimiter;</span>
+    }
+
+    public DelimiterType getDelimiterType() {
+<span class="nc" id="L242">        return delimiterType;</span>
+    }
+
+    public String getTemplatesLocation() {
+<span class="nc" id="L246">        return templatesLocation;</span>
+    }
+
+    public Map&lt;String, String&gt; getScripts() {
+<span class="nc" id="L250">        return scripts;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.2.201302030002</span></div></body></html>

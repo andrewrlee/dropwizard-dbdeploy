@@ -1,0 +1,15 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard,DbDeployProperties,6,139,3,3,0,35,3,24,0,24
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard,DbDeployBundle,7,21,0,0,4,6,2,2,2,2
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard,ScriptApplier,15,113,1,5,6,31,1,9,0,7
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard,DbDeployDatabaseConfiguration,6,12,0,0,1,4,1,3,1,3
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard.commands,AbstractDbDeployCommand,30,88,1,1,7,23,3,2,2,2
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard.commands,RunScriptCommand,21,41,0,2,3,11,1,4,1,3
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard.commands,MainDbDeployCommand,44,36,2,0,8,7,3,2,2,2
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard.commands,UpgradeCommand,3,7,0,0,2,2,1,1,1,1
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard.dbdeploy,ClasspathDbDeploy,243,120,10,0,49,50,17,28,12,28
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard.dbdeploy,ClasspathTemplateBasedApplier,30,93,0,2,4,20,0,5,0,4
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard.dbdeploy,ClasspathResourceScanner,6,141,1,3,3,26,1,8,0,7
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard.dbdeploy,ClasspathUndoTemplateBasedApplier,0,9,0,0,0,3,0,2,0,2
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard.dbdeploy,ClasspathResourceScanner.new Predicate() {...},0,11,0,0,0,2,0,2,0,2
+Dropwizard Dbdeploy,uk.co.optimisticpanda.dropwizard.dbdeploy,ClasspathChangeScript,40,61,2,4,12,19,6,4,4,3

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DbDeployProperties.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Dropwizard Dbdeploy</a> &gt; <a href="index.html" class="el_package">uk.co.optimisticpanda.dropwizard</a> &gt; <span class="el_source">DbDeployProperties.java</span></div><h1>DbDeployProperties.java</h1><pre class="source lang-java linenums">package uk.co.optimisticpanda.dropwizard;
+
+import static com.dbdeploy.database.DelimiterType.normal;
+import static com.dbdeploy.database.LineEnding.platform;
+import static com.google.common.base.Charsets.UTF_8;
+import static com.google.common.base.Enums.getIfPresent;
+import static com.google.common.base.Optional.fromNullable;
+
+import java.io.File;
+import java.nio.charset.Charset;
+
+import com.dbdeploy.database.DelimiterType;
+import com.dbdeploy.database.LineEnding;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
+
+<span class="fc" id="L17">public class DbDeployProperties {</span>
+
+    private String changelogTableName;  
+    private String dbms;  
+    private String delimiter;  
+    private String delimiterType;  
+    private String encoding;  
+    private Long lastChangeToApply;  
+    private String lineEnding;  
+    private String scriptLocation;  
+    private String outputFile;  
+    private String templatesLocation;  
+    private String undoOutputDirectory;  
+    
+    public String getChangelogTableName() {
+<span class="fc" id="L32">        return fromNullable(changelogTableName).or(&quot;changelog&quot;);</span>
+    }
+    public String getDbms() {
+<span class="fc" id="L35">        return fromNullable(dbms).orNull();</span>
+    }
+    public String getDelimiter() {
+<span class="fc" id="L38">        return fromNullable(delimiter).or(&quot;;&quot;);</span>
+    }
+    
+    public DelimiterType getDelimiterType() {
+<span class="fc" id="L42">        return getOptional(DelimiterType.class, delimiterType).or(normal);</span>
+    }
+
+    public Charset getEncoding() {
+<span class="fc" id="L46">        return Charset.forName(fromNullable(encoding).or(UTF_8.name()));</span>
+    }
+ 
+    public Long getLastChangeToApply() {
+<span class="fc" id="L50">        return fromNullable(lastChangeToApply).or(Long.MAX_VALUE);</span>
+    }
+
+    public LineEnding getLineEnding() {
+<span class="fc" id="L54">        return getOptional(LineEnding.class, lineEnding).or(platform);</span>
+    }
+
+    public String getScriptLocation() {
+<span class="fc" id="L58">        return fromNullable(scriptLocation).orNull();</span>
+    }
+
+    public File getOutputFile() {
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        return outputFile == null ? null : new File(outputFile);</span>
+    }
+
+    public String getTemplatesLocation() {
+<span class="fc" id="L66">        return fromNullable(templatesLocation).or(&quot;/&quot;);</span>
+    }
+    
+    public File getUndoOutputDirectory() {
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        return undoOutputDirectory == null ? null : new File(undoOutputDirectory);</span>
+    }
+    
+    private &lt;D extends Enum&lt;D&gt;&gt; Optional&lt;D&gt; getOptional(Class&lt;D&gt; clazz, String value){
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        return value == null ? Optional.&lt;D&gt;absent() : getIfPresent(clazz, value);</span>
+    }
+    
+    @VisibleForTesting
+    void setChangelogTableName(String changelogTableName) {
+<span class="fc" id="L79">        this.changelogTableName = changelogTableName;</span>
+<span class="fc" id="L80">    }</span>
+    
+    @VisibleForTesting
+    void setDbms(String dbms) {
+<span class="fc" id="L84">        this.dbms = dbms;</span>
+<span class="fc" id="L85">    }</span>
+    
+    @VisibleForTesting
+    void setDelimiter(String delimiter) {
+<span class="fc" id="L89">        this.delimiter = delimiter;</span>
+<span class="fc" id="L90">    }</span>
+    
+    @VisibleForTesting
+    void setDelimiterType(String delimiterType) {
+<span class="fc" id="L94">        this.delimiterType = delimiterType;</span>
+<span class="fc" id="L95">    }</span>
+    
+    @VisibleForTesting
+    void setEncoding(String encoding) {
+<span class="fc" id="L99">        this.encoding = encoding;</span>
+<span class="fc" id="L100">    }</span>
+    
+    @VisibleForTesting
+    void setLastChangeToApply(Long lastChangeToApply) {
+<span class="fc" id="L104">        this.lastChangeToApply = lastChangeToApply;</span>
+<span class="fc" id="L105">    }</span>
+    
+    @VisibleForTesting
+    void setLineEnding(String lineEnding) {
+<span class="fc" id="L109">        this.lineEnding = lineEnding;</span>
+<span class="fc" id="L110">    }</span>
+    
+    @VisibleForTesting
+    void setScriptLocation(String scriptLocation) {
+<span class="fc" id="L114">        this.scriptLocation = scriptLocation;</span>
+<span class="fc" id="L115">    }</span>
+    
+    @VisibleForTesting
+    void setOutputFile(String outputFile) {
+<span class="fc" id="L119">        this.outputFile = outputFile;</span>
+<span class="fc" id="L120">    }</span>
+    
+    @VisibleForTesting
+    void setTemplateLocation(String templateLocation) {
+<span class="fc" id="L124">        this.templatesLocation = templateLocation;</span>
+<span class="fc" id="L125">    }</span>
+    
+    @VisibleForTesting
+    void setUndoOutputDirectory(String undoOutputDirectory) {
+<span class="fc" id="L129">        this.undoOutputDirectory = undoOutputDirectory;</span>
+<span class="fc" id="L130">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.2.201302030002</span></div></body></html>

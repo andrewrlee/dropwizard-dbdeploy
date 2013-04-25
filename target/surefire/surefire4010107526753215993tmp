@@ -1,0 +1,5 @@
+#surefire
+#Wed Apr 24 22:31:36 BST 2013
+user.dir=/home/alee/workspaces/fructifier/dropwizard-dbdeploy
+localRepository=/home/alee/.m2/repository
+basedir=/home/alee/workspaces/fructifier/dropwizard-dbdeploy
