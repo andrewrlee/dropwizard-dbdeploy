@@ -26,7 +26,7 @@ public class DbDeployProperties {
     private String scriptLocation;  
     private String outputFile;  
     private String templatesLocation;  
-    private String undoOutputDirectory;  
+    private String undoOutputFile;  
     
     public String getChangelogTableName() {
         return fromNullable(changelogTableName).or("changelog");
@@ -66,8 +66,8 @@ public class DbDeployProperties {
         return fromNullable(templatesLocation).or("/");
     }
     
-    public File getUndoOutputDirectory() {
-        return undoOutputDirectory == null ? null : new File(undoOutputDirectory);
+    public File getUndoOutputFile() {
+        return undoOutputFile == null ? null : new File(undoOutputFile);
     }
     
     private <D extends Enum<D>> Optional<D> getOptional(Class<D> clazz, String value){
@@ -125,8 +125,8 @@ public class DbDeployProperties {
     }
     
     @VisibleForTesting
-    void setUndoOutputDirectory(String undoOutputDirectory) {
-        this.undoOutputDirectory = undoOutputDirectory;
+    void setUndoOutputFile(String undoOutputFile) {
+        this.undoOutputFile = undoOutputFile;
     }
     
 }

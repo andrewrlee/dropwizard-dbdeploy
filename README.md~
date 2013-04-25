@@ -9,7 +9,7 @@ This can be exploited by providing a yaml file such as:
 
 ```yaml
 
-database:
+database:  
     # Supports all of the standard dropwizard database parameters
     driverClass: com.mysql.jdbc.Driver
     user       : root

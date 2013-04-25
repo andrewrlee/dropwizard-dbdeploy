@@ -56,7 +56,7 @@ public abstract class AbstractDbDeployCommand<T extends Configuration> extends C
         dbdeploy.setScriptLocation(dbdeployProps.getScriptLocation());
         dbdeploy.setOutputfile(dbdeployProps.getOutputFile());
         dbdeploy.setTemplateLocation(dbdeployProps.getTemplatesLocation());
-        dbdeploy.setUndoOutputfile(dbdeployProps.getUndoOutputDirectory());
+        dbdeploy.setUndoOutputfile(dbdeployProps.getUndoOutputFile());
 
         return dbdeploy;
     }

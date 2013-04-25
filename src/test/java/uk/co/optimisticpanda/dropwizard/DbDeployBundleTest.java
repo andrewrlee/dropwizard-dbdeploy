@@ -46,7 +46,7 @@ public class DbDeployBundleTest {
         props.setDbms("mysql");
         props.setOutputFile("filea");
         props.setScriptLocation("fileb");
-        props.setUndoOutputDirectory("filec");
+        props.setUndoOutputFile("filec");
         props.setTemplateLocation("filed");
 
         props.setChangelogTableName("changelog");
