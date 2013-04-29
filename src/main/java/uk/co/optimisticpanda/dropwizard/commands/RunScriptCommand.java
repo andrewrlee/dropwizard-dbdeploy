@@ -22,13 +22,8 @@ public class RunScriptCommand<T extends Configuration> extends AbstractDbDeployC
     @Override
     protected void run(Namespace namespace, ClasspathDbDeploy dbdeploy, DbDeployDatabaseConfiguration config) throws Exception {
         String script = namespace.getString("script");
-        if(!config.getScripts().containsKey(script)){
-            log.error("Could not find script named: {}, available scripts: {}", script, config.getScripts().keySet());
-            return;
-        }
-        String resourceLocation = config.getScript(script);
-        log.info("Executing script named [{}], located at [{}]", script, resourceLocation);
-        dbdeploy.executeScript(resourceLocation);
+        log.info("Executing script located at [{}]", script);
+        dbdeploy.executeScript(script);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package uk.co.optimisticpanda.dropwizard.commands;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,7 +11,6 @@ import org.junit.Test;
 import uk.co.optimisticpanda.dropwizard.DbDeployDatabaseConfiguration;
 import uk.co.optimisticpanda.dropwizard.dbdeploy.ClasspathDbDeploy;
 
-import com.google.common.collect.ImmutableMap;
 import com.yammer.dropwizard.config.Configuration;
 
 public class RunScriptCommandTest {
@@ -33,23 +30,12 @@ public class RunScriptCommandTest {
     }
     
     @Test
-    public void checkExecuteScriptDoesntApplyWhenHasNoScript() throws Exception{
-        doThrow(new RuntimeException("Shouldn't call execute script")).when(dbdeploy).executeScript(anyString());
-        
-        when(namespace.getString("script")).thenReturn("scriptName");
-        when(config.getScripts()).thenReturn(ImmutableMap.<String,String>of());
-        
-        runScriptCommand.run(namespace, dbdeploy, config);
-    }
-    
-    @Test
     public void checkExecuteScriptDoesntApplyWhenItIsFound() throws Exception{
         when(namespace.getString("script")).thenReturn("scriptName");
-        when(config.getScripts()).thenReturn(ImmutableMap.of("scriptName","resourceLocation"));
-        when(config.getScript("scriptName")).thenReturn("resourceLocation");
+        
         runScriptCommand.run(namespace, dbdeploy, config);
 
-        verify(dbdeploy).executeScript("resourceLocation");
+        verify(dbdeploy).executeScript("scriptName");
     }
 
 }

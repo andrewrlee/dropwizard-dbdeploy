@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.optimisticpanda.dropwizard.ScriptApplier;
 
 import com.dbdeploy.ChangeScriptApplier;
 import com.dbdeploy.Controller;
@@ -44,7 +42,6 @@ public class ClasspathDbDeploy {
     private String delimiter = ";";
     private DelimiterType delimiterType = DelimiterType.normal;
     private String templatesLocation;
-    private Map<String, String> scripts;
 
     public void go() throws Exception {
         log.info(getWelcomeString());
@@ -182,10 +179,6 @@ public class ClasspathDbDeploy {
         this.lineEnding = lineEnding;
     }
 
-    public void setScripts(Map<String, String> scripts) {
-        this.scripts = scripts;
-    }
-
     public String getUrl() {
         return url;
     }
@@ -244,10 +237,6 @@ public class ClasspathDbDeploy {
 
     public String getTemplatesLocation() {
         return templatesLocation;
-    }
-
-    public Map<String, String> getScripts() {
-        return scripts;
     }
 
 }

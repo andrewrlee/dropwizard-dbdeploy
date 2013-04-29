@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 
+import uk.co.optimisticpanda.dropwizard.dbdeploy.ScriptApplier;
+
 import com.dbdeploy.database.QueryStatementSplitter;
 import com.dbdeploy.database.changelog.QueryExecuter;
 import com.dbdeploy.scripts.ChangeScript;

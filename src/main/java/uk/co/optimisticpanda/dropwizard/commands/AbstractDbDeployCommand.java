@@ -43,7 +43,6 @@ public abstract class AbstractDbDeployCommand<T extends Configuration> extends C
         dbdeploy.setUrl(dbConfig.getUrl());
         dbdeploy.setPassword(dbConfig.getPassword());
         dbdeploy.setUserid(dbConfig.getUser());
-        dbdeploy.setScripts(dbConfig.getScripts());
 
         DbDeployProperties dbdeployProps = dbConfig.getDbdeploy() != null ? dbConfig.getDbdeploy() : new DbDeployProperties();
         dbdeploy.setChangeLogTableName(dbdeployProps.getChangelogTableName());

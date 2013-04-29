@@ -1,4 +1,4 @@
-package uk.co.optimisticpanda.dropwizard;
+package uk.co.optimisticpanda.dropwizard.dbdeploy;
 
 import java.sql.SQLException;
 import java.util.List;
