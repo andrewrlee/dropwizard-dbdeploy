@@ -3,7 +3,7 @@ dropwizard-dbdeploy
 
 Embedded dbdeploy for dropwizard
 
-This project provides a [command](http://dropwizard.codahale.com/manual/core/#man-core-commands) for dropwizard that will run an embedded version of [dbdeploy](https://github.com/tackley/dbdeploy). This has the benefit over dropwizard-migrations in that it uses native sql rather than liquibase xml change definitions.
+This project provides a [command](http://dropwizard.codahale.com/manual/core/#man-core-commands) for dropwizard that will run an embedded version of [dbdeploy](https://github.com/tackley/dbdeploy). This has the benefit over dropwizard-migrations in that it uses native sql rather than liquibase xml change definitions. For an introduction to dbdeploy see [here](http://code.google.com/p/dbdeploy/wiki/GettingStarted).
 
 Whilst dbdeploy only allows for its deltas to be available on the file system, this project uses the [reflections](http://code.google.com/p/reflections/) library, which allows script files to be located inside the main application jar. This means you can release joint application and database releases in one archive. 
 
