@@ -14,7 +14,8 @@ N.B This is also an easy way to provide a database release as a standalone java 
 
 ## Example project
 
-An example project can be found here: __IN PROGRESS__
+An example project can be found [here](https://github.com/plasma147/dropwizard-dbdeploy/blob/master/dropwizard-dbdeploy-sample.zip)
+
 
 ## Example Yaml File
 
@@ -54,7 +55,17 @@ java -jar dropwizard-dbdeploy-sample-0.0.1-SNAPSHOT.jar db upgrade sample.yaml
 
 ## Integrating with dbdeploy
 
-To add to an application, you just need to use the DbDeployDatabaseConfiguration object rather than the DatabaseConfiguration Object. (This extends the DatabaseConfiguration Object, so it's still possible to use [dropwizard-jdbi](http://dropwizard.codahale.com/manual/jdbi/) and [dropwizard-hibernate](http://dropwizard.codahale.com/manual/hibernate/)): 
+The requisite dependency is available in the central maven repo:
+
+```xml
+<dependency>
+  <groupId>uk.co.optimisticpanda</groupId>
+  <artifactId>dropwizard-dbdeploy</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+
+To add to a dropwizard application, you just need to use the DbDeployDatabaseConfiguration object rather than the DatabaseConfiguration Object. (This extends the DatabaseConfiguration Object, so it's still possible to use [dropwizard-jdbi](http://dropwizard.codahale.com/manual/jdbi/) and [dropwizard-hibernate](http://dropwizard.codahale.com/manual/hibernate/)): 
 
 ```java
 public class AutoUpgradeDbSampleService extends Service<SampleConfiguration> {
@@ -119,7 +130,7 @@ database:
        # The number of the last delta to apply. This is optional with no default
        lastChangeToApply : 099
 
-       # The line style of line ending present in the script/delta files. Possible options include : platform, cr, crlf, lf. Defaults to platform line seperator.
+       # The style of line ending present in the script/delta files. Possible options include : platform, cr, crlf, lf. Defaults to platform line seperator.
        lineEnding : platform
  
        # Specifying this file means that instead of applying the delta to the database, it generates one script with all of the applicable deltas.
