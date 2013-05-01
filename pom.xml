@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.co.optimisticpanda</groupId>
 	<artifactId>dropwizard-dbdeploy</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>Dropwizard Dbdeploy</name>
 	<description>A dbdeploy bundle for dropwizard</description>
 
