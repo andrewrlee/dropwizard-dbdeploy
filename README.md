@@ -14,7 +14,7 @@ N.B This is also an easy way to provide a database release as a standalone java 
 
 ## Example project
 
-An example project can be found [here](https://github.com/plasma147/dropwizard-dbdeploy/blob/master/dropwizard-dbdeploy-sample.zip)
+An example project can be found [here](https://github.com/plasma147/dropwizard-dbdeploy/blob/master/dropwizard-dbdeploy-sample.zip?raw=true)
 
 
 ## Example Yaml File
