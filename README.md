@@ -55,7 +55,7 @@ java -jar dropwizard-dbdeploy-sample-0.0.1-SNAPSHOT.jar db upgrade sample.yaml
 
 ## Integrating with dbdeploy
 
-The requisite dependency is available in the central maven repo:
+dropwizard-dbdeploy is available in the central maven repo:
 
 ```xml
 <dependency>
