@@ -3,11 +3,11 @@ dropwizard-dbdeploy
 
 Embedded dbdeploy for dropwizard
 
-This project provides a [command](http://dropwizard.codahale.com/manual/core/#man-core-commands) for dropwizard that will run an embedded version of [dbdeploy](https://github.com/tackley/dbdeploy). This has the benefit over dropwizard-migrations in that it uses native sql rather than liquibase xml change definitions. For an introduction to dbdeploy see [here](http://code.google.com/p/dbdeploy/wiki/GettingStarted)
+This project provides a [command](http://dropwizard.codahale.com/manual/core/#man-core-commands) for dropwizard that will run an embedded version of [dbdeploy](https://github.com/tackley/dbdeploy). This has the benefit over dropwizard-migrations in that it uses sql deltas rather than liquibase xml change definitions. For an introduction to dbdeploy see [here](http://code.google.com/p/dbdeploy/wiki/GettingStarted).
 
-Whilst dbdeploy only allows for its deltas to be available on the file system, this project uses the [reflections](http://code.google.com/p/reflections/) library, which allows script files to be located inside the main application jar. This means you can release joint application and database releases in one archive. 
+Whilst dbdeploy only allows for its deltas to be available on the file system, this project uses the [reflections](http://code.google.com/p/reflections/) library, which allows script files to be located inside the main application jar. This means you can provide joint application and database releases in one archive. 
 
-It also provides a "run" command that allows you to run arbitrary scripts that are present in the classpath. 
+A "run" command is also provided, which allows you to run arbitrary scripts that are present in the classpath.
 
 N.B This is also an easy way to provide a database release as a standalone java application - you don't neccessarily have to use dropwizard as you stack for you application.
 

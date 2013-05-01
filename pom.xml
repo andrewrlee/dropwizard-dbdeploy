@@ -21,6 +21,12 @@
 		</license>
 	</licenses>
 
+	<scm>
+		<url>scm:git:git@github.com:plasma147/dropwizard-dbdeploy.git</url>
+		<connection>scm:git:git@github.com:plasma147/dropwizard-dbdeploy.git</connection>
+		<developerConnection>scm:git:git@github.com:plasma147/dropwizard-dbdeploy.git</developerConnection>
+	</scm>
+
 	<profiles>
 		<profile>
 			<id>release-sign-artifacts</id>
